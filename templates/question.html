@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{%load static%}
+{%block content%}
+        <div class="questionblock">
+            <div class="bigquestion"><div class="left"><img src="{%static 'img/default_ava.jpg' %}" class="qava"><div class="card"><button class="incdecbut">-</button><p id="root" class="showcount">5</p><button class="incdecbut">+</button>
+            </div>
+            
+        </div>
+        <div class="right">
+            <p  class="topic">{{question.title}}</p>
+            <p class="descriptionq">{{question.text}}</p>
+            <div class="bansandtags"><div class="qtags"><p >Tags:</p><a href="">C++</a></div></div>
+        </div>
+        </div>
+
+        </div>
+        <div class="ansblock">
+
+            <ul class="list1">
+                {% for i in page_obj %}
+                <li class="fragment1">
+            <div class="answer"><div class="left"><img src="{%static 'img/default_ava.jpg' %}" class="qava"><div class="card"><button class="incdecbut">-</button><p id="root" class="showcount">5</p><button class="incdecbut">+</button>
+            </div>
+            
+        </div>
+        <div class="right">
+            <p class="nick">{{i.user}}</p>
+            <p class="answer_t">{{i.text}}</p>
+            <div class="checkboxgood"><form><input id="correct_a" type="checkbox"><label for="correct_a">Correct!</label></form></div>
+        </div>
+        </div>
+                </li>
+                {%endfor%}
+            </ul>
+        </div>
+        <div class="yourans"><form class="ansfrom" >
+            <div class="allf"><textarea name="anstxt"  class="atxt" placeholder="answer" required maxlength="1000"></textarea></div>
+           <div class="ansbut"> <input type="submit" value="Answer" class="goans"></div>
+        
+    </form></div> 
+    {%endblock%}

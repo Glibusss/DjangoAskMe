@@ -1,0 +1,71 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Main Page</title>
+        <link href="{%static 'css/Style.css' %}" rel ="stylesheet" type ="text/css">
+    </head>
+
+    <body>
+<div class="header">
+    <div class="sitename">
+        <div class="askme"><a href="#" class="mainpage">AskMe</a></div>
+    </div>
+    <div class="searchbar">
+        <form class="search-form" >
+            <p>
+                <input type="search" name="q" placeholder="Найти" class="searchb" maxlength="100">
+            </p>
+        </form>
+    </div>
+    <div class="askbut">
+        <form action="">
+            <button type="submit" class="ask">ASK!</button>
+        </form>
+    </div>
+    <div class="avatar">
+        <label class="ava">
+            <img src="{%static 'img/default_ava.jpg' %}"  alt="Fail to load" class="avapic">
+        </label>
+    </div>
+    <div class="foruser">
+        <div class="nickname">Nickname</div>
+        <div class="settings">
+            <a href="#" name="setting">Настройки</a>
+            <a href="{%url 'main'%}" name="lo">Выйти</a>
+        </div>
+        
+    </div>
+   </div>
+<hr class="horizontal-gradient">
+<div class="container">
+    <div class="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+    <div class="sidebar">
+       <div class="tops">
+        <div class="toptags"><p class="pt">Popular Tags</p>
+            <div class="firsttag">C++</div>
+            <div class="secondtag">Java</div>
+            <div class="thirdtag">Python</div>
+            <div class="fourthtag">QT</div>
+            <div class="fifthtag">JS</div>
+        </div>
+        <div class="topusers">
+            <p class="tu">Top Users</p>
+                <div class="firstuser">User1</div>
+                <div class="seconduser">User2</div>
+                <div class="thirduser">User3</div>
+                <div class="fourthuser">User4</div>
+                <div class="fifthuser">User5</div>
+                
+       </div>
+   
+    </div>
+</div>
+</div>
+<div class="footer"></div>
+    </body>
+</html>

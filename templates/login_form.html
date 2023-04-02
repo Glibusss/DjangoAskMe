@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+   {%block content%}
+        <div class="formname">Log In</div>
+        <div class="loginerr">{{Errortype}}</div>
+        <div class="formlogin"> <form class="lform" >
+           
+                <div class="logf"><input type="text" name="lg" placeholder="Login" class="trow" required maxlength="50"></div>
+                <div class="pasf"><input type="password" name="pw" placeholder="Password" class="trow" required maxlength="32" minlength="8"></div>
+               <div class="subb"> <input type="submit" value="Go" class="loginbut"></div>
+            
+        </form></div>
+        <div class="gotoreg"><a href="{% url 'signup'%}" name="goreg">Create new account</a></div>
+ {%endblock%}
+    
