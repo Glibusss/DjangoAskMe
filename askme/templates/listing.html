@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{%load static%}
+   {%block content%}
+   
+        <div class="qlisting">
+            <h2 class="nque">{{pagename}}</h2>
+            <a href="{%url link%}"class="hots">{{linkname}}</a>
+            
+            <ul class="list">
+                {%for i in page_obj%}
+                <li class="fragment">
+            <div class="question"><div class="left"><img src="{%static 'img/default_ava.jpg'%}" class="qava"><div class="card"><button class="incdecbut">-</button><p id="root" class="showcount">5</p><button class="incdecbut">+</button>
+            </div>
+            
+        </div>
+        <div class="right">
+            <a href="{%url 'questions' i.id%}" class="topic">{{i.title}}</a>
+            <p class="descriptionq">{{i.text}}</p>
+            <div class="ansandtags"><a href="{%url 'questions' i.id%}" class="ans">answer(3)</a><div class="qtags"><p >Tags:</p><a href="{%url 'tag' i.tags%}">{{i.tags}}</a></div></div>
+        </div>
+        </div>
+        </li>
+        {%endfor%}
+       </ul>
+    </div>
+      
+ 
+        
+   {%endblock%}
