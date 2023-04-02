@@ -2,14 +2,15 @@
 {%load static%}
 {%block content%}
         <div class="questionblock">
-            <div class="bigquestion"><div class="left"><img src="{%static 'img/default_ava.jpg' %}" class="qava"><div class="card"><button class="incdecbut">-</button><p id="root" class="showcount">5</p><button class="incdecbut">+</button>
+            <div class="bigquestion"><div class="left"><img src="{%static 'img/default_ava.jpg' %}" class="qava">
+                <div class="card"><button class="incdecbut">-</button><p id="root" class="showcount">5</p><button class="incdecbut">+</button>
             </div>
             
         </div>
         <div class="right">
             <p  class="topic">{{question.title}}</p>
             <p class="descriptionq">{{question.text}}</p>
-            <div class="bansandtags"><div class="qtags"><p >Tags:</p><a href="">C++</a></div></div>
+            <div class="bansandtags"><div class="qtags"><p >Tags:</p><a href="">{{question.tag}}</a></div></div>
         </div>
         </div>
 

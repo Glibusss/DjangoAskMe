@@ -1,6 +1,6 @@
 import math
 from django.http import HttpResponseNotFound
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.core.paginator import Paginator
 from website.models import questions, answers
 
@@ -38,7 +38,7 @@ def hot(request):
 def ask(request):
     if request.GET.get('question')!= None and request.GET.get('qdescription')!= None and request.GET.get('tags')!= None:
        questions.append(
-       { 'id': len(questions),
+       { 'id': len(questions)+4,
         'title': request.GET.get('question'),
         'text': request.GET.get('qdescription'),
         'tags':request.GET.get('tags'),})
@@ -47,17 +47,11 @@ def ask(request):
 
 
 def question(request,id):
-   
    for question in questions:
-    if id in question.values():
-        
-        return render(request, 'question.html',{'page_obj':paginate(answers,request,2),'answers':answers,'question':question})
-    
-   else:
-       
-    return redirect('404/', permanent=True)
-   
+        if id in question.values():
+           return render(request, 'question.html',{'page_obj':paginate(answers,request,2),'answers':answers,'question':question})
 
+    
 def tag(request,tg):
     temp_que = []
     for question in questions:
@@ -66,10 +60,7 @@ def tag(request,tg):
 
     if len(temp_que)>0:
         return render(request,'listing.html',{'page_obj':paginate(temp_que,request,4),'questions':temp_que, 'pagename':'Results searching by '+tg,'linkname':'New Questions','link':'main'})
-    else:
-       return redirect('404/',permanent=False)
 
 
 def pageNotFound(request,exception):
-
     return HttpResponseNotFound()

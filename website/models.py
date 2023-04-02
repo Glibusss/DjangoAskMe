@@ -8,7 +8,7 @@ answers = []
 for i in range(1,30):
 
     questions.append({
-        'id': i,
+        'id': i+4,
         'title': 'title'+str(i),
         'text': 'text'+str(i),
         'tags':'tag'+str(i),
@@ -16,7 +16,7 @@ for i in range(1,30):
 
     
 questions.append({
-        'id': 30,
+        'id': len(questions),
         'title': 'qqqq',
         'text': 'tttt',
         'tags':'tag1',
