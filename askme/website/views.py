@@ -1,8 +1,7 @@
-from django.shortcuts import render
-from django.http import HttpResponseNotFound
+from django.http import Http404, HttpResponseNotFound
 from django.shortcuts import render
 from django.core.paginator import Paginator
-from website.models import QUESTIONS, answers
+from website.models import ANSWERS, QUESTIONS
 
 
 def paginate(obj_list, request, per_page=1):
@@ -17,9 +16,10 @@ def paginate(obj_list, request, per_page=1):
    
 
 # Create your views here.
+
+
 def listing(request):
-        
-    return render(request,'listing.html',{'page_obj':paginate(QUESTIONS,request,4),'questions':QUESTIONS,'pagename':'New Questions','linkname':'Hot questions','link':'hots'})
+    return render(request,'listing.html',{'page_obj':paginate(QUESTIONS,request,4),'pagename':'New Questions','linkname':'Hot questions','link':'hots'})
     
     
 def login(request):
@@ -31,7 +31,6 @@ def registration(request):
 
 
 def hot(request):
-
     return render(request,'listing.html',{'page_obj':paginate(QUESTIONS,request,4),'questions':QUESTIONS,'pagename':'Hot questions','linkname':'New Questions','link':'main'})
     
     
@@ -50,7 +49,10 @@ def ask(request):
 def questions(request,id):
    for que in QUESTIONS:
         if id in que.values():
-           return render(request, 'question.html',{'page_obj':paginate(answers,request,2),'answers':answers,'question':que})
+           return render(request, 'question_page.html',{'page_obj':paginate(ANSWERS,request,2),'answers':ANSWERS,'que':que})
+    
+   raise Http404 
+    
 
     
 def tag(request,tg):
@@ -62,6 +64,8 @@ def tag(request,tg):
     if len(temp_que)>0:
         return render(request,'listing.html',{'page_obj':paginate(temp_que,request,4),'questions':temp_que, 'pagename':'Results searching by '+tg,'linkname':'New Questions','link':'main'})
 
+    else:
+        raise Http404
 
 def pageNotFound(request,exception):
     return HttpResponseNotFound()

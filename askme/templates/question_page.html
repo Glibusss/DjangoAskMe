@@ -8,9 +8,9 @@
             
         </div>
         <div class="right">
-            <p  class="topic">{{question.title}}</p>
-            <p class="descriptionq">{{question.text}}</p>
-            <div class="bansandtags"><div class="qtags"><p >Tags:</p><a href="">{{question.tag}}</a></div></div>
+            <p  class="topic">{{que.title}}</p>
+            <p class="descriptionq">{{que.text}}</p>
+            <div class="bansandtags"><div class="qtags"><p >Tags:</p><a href="{%url 'tag' que.tags%}">{{que.tags}}</a></div></div>
         </div>
         </div>
 

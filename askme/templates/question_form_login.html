@@ -1,7 +1,7 @@
-{% extends 'base_login.html' %}
+{% extends 'base.html' %}
 {%block content%}
         <div class="formname">Question</div>
-        <div class="loginerr">Sorry, wrong data</div>
+        <div class="loginerr">{{Errortype}}</div>
         <div class="qform"> <form class="quform" >
             <div class="allf"><p class="alltitle">Title</p><input type="text" name="question" placeholder="Type your question here" class="que" maxlength="50" ></div>
             <div class="allf"><p class="alltitle">Question</p><textarea name="qdescription" class="qdisc" placeholder="Type your text here" maxlength="1000"></textarea></div>

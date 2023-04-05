@@ -2,7 +2,7 @@ from django.db import models
 
 # Create your models here.
 QUESTIONS = []
-answers = []
+ANSWERS = []
 
 
 for i in range(1,30):
@@ -25,8 +25,10 @@ QUESTIONS.append({
 
 for i in range(1,30):
 
-    answers.append({
+    ANSWERS.append({
         'user': 'user'+str(i),
         'id': i,
         'text': 'text'+str(i),
     })
+
+
