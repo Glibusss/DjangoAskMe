@@ -9,14 +9,14 @@
             <ul class="list">
                 {%for i in page_obj%}
                 <li class="fragment">
-            <div class="question"><div class="left"><img src="{%static 'img/default_ava.jpg'%}" class="qava"><div class="card"><button class="incdecbut">-</button><p id="root" class="showcount">5</p><button class="incdecbut">+</button>
+            <div class="question"><div class="left"><img src="{%static 'img/default_ava.jpg'%}" class="qava"><div class="card"><button class="incdecbut">-</button><p id="root" class="showcount"></p><button class="incdecbut">+</button>
             </div>
             
         </div>
         <div class="right">
             <a href="{%url 'questions' i.id%}" class="topic">{{i.title}}</a>
             <p class="descriptionq">{{i.description}}</p>
-            <div class="ansandtags"><a href="{%url 'questions' i.id%}" class="ans">answer(3)</a><div class="qtags"><p >Tags:</p>
+            <div class="ansandtags"><a href="{%url 'questions' i.id%}" class="ans">answer({{i.answer_set.count}})</a><div class="qtags"><p >Tags:</p>
                 {%for t in i.tag.all%}
                 <a href="{%url 'tag' t%}">{{t}}</a>
                 {%endfor%}

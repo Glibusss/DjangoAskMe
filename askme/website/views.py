@@ -4,7 +4,7 @@ from django.core.paginator import Paginator
 from website.models import ANSWERS, QUESTIONS, question,answer,user
 
 
-qq = question.objects.order_by('-publicationMoment')
+
 
 
 
@@ -23,7 +23,7 @@ def paginate(obj_list, request, per_page=1):
 
 
 def listing(request):
-    return render(request,'listing.html',{'page_obj':paginate(qq,request,4),'pagename':'New Questions','linkname':'Hot questions','link':'hots'})
+    return render(request,'listing.html',{'page_obj':paginate(question.objects.orderByDate(),request,4),'pagename':'New Questions','linkname':'Hot questions','link':'hots'})
     
     
 def login(request):
@@ -35,8 +35,7 @@ def registration(request):
 
 
 def hot(request):
-    qr = question.objects.order_by('-rating','-publicationMoment')
-    return render(request,'listing.html',{'page_obj':paginate(qr,request,4),'questions':qr,'pagename':'Hot questions','linkname':'New Questions','link':'main'})
+    return render(request,'listing.html',{'page_obj':paginate(question.objects.orderByRating(),request,4),'pagename':'Hot questions','linkname':'New Questions','link':'main'})
     
     
 
@@ -45,25 +44,19 @@ def ask(request):
 
 
 def questions(request,id):
-   ans=answer.objects.filter(questionId=id)
-   usrs=user.objects.all()
-   try:
-       que=question.objects.get(pk=id)
-   except question.DoesNotExist:
-       que = None
    
-   if que == None:
+   if question.objects.findId(id) == None:
        raise Http404 
-   
-   return render(request, 'question_page.html',{'page_obj':paginate(ans,request,2),'answers':ans,'que':question.objects.get(pk=id)})
+   ans=answer.objects.sortByTop(id)
+   return render(request, 'question_page.html',{'page_obj':paginate(ans,request,2),'answers':ans,'que':question.objects.findId(id)})
    
     
 def tag(request,tg):
     
-    temp_que=question.objects.filter(tag__tag=tg)
+    temp_que=question.objects.filterTagByDate(tg)
 
     if len(temp_que)>0:
-        return render(request,'listing.html',{'page_obj':paginate(temp_que,request,4),'questions':temp_que, 'pagename':'Results searching by '+tg,'linkname':'New Questions','link':'main'})
+        return render(request,'listing.html',{'page_obj':paginate(question.objects.filterTagByDate(tg),request,4),'pagename':'Results searching by '+tg,'linkname':'New Questions','link':'main'})
 
     else:
         raise Http404
