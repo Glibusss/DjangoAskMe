@@ -30,11 +30,7 @@
             
         </div>
         <div class="right">
-            {%for u in users%}
-            {%if i.authorId in u.values%}
-            <p class="nick">{{u.username}}</p>
-            {%endif%}
-            {%endfor%}
+            <p class="nick">{{i.authorId.username}}</p>
             <p class="answer_t">{{i.txt}}</p>
             <div class="checkboxgood"><form><input id="correct_a" type="checkbox"><label for="correct_a">Correct!</label></form></div>
         </div>

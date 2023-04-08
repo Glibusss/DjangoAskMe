@@ -55,7 +55,7 @@ def questions(request,id):
    if que == None:
        raise Http404 
    
-   return render(request, 'question_page.html',{'page_obj':paginate(ans,request,2),'answers':ans,'que':question.objects.get(pk=id),'users':user.objects.all()})
+   return render(request, 'question_page.html',{'page_obj':paginate(ans,request,2),'answers':ans,'que':question.objects.get(pk=id)})
    
     
 def tag(request,tg):
