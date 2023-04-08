@@ -15,8 +15,12 @@
         </div>
         <div class="right">
             <a href="{%url 'questions' i.id%}" class="topic">{{i.title}}</a>
-            <p class="descriptionq">{{i.text}}</p>
-            <div class="ansandtags"><a href="{%url 'questions' i.id%}" class="ans">answer(3)</a><div class="qtags"><p >Tags:</p><a href="{%url 'tag' i.tags%}">{{i.tags}}</a></div></div>
+            <p class="descriptionq">{{i.description}}</p>
+            <div class="ansandtags"><a href="{%url 'questions' i.id%}" class="ans">answer(3)</a><div class="qtags"><p >Tags:</p>
+                {%for t in i.tag.all%}
+                <a href="{%url 'tag' t%}">{{t}}</a>
+                {%endfor%}
+            </div></div>
         </div>
         </div>
         </li>

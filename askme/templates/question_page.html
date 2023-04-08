@@ -9,8 +9,13 @@
         </div>
         <div class="right">
             <p  class="topic">{{que.title}}</p>
-            <p class="descriptionq">{{que.text}}</p>
-            <div class="bansandtags"><div class="qtags"><p >Tags:</p><a href="{%url 'tag' que.tags%}">{{que.tags}}</a></div></div>
+            <p class="descriptionq">{{que.description}}</p>
+            <div class="bansandtags"><div class="qtags"><p >Tags:</p>
+                {%for q in que.tag.all%}
+                <a href="{%url 'tag' q%}">{{q}}</a>
+                {%endfor%}
+            
+            </div></div>
         </div>
         </div>
 
@@ -25,8 +30,12 @@
             
         </div>
         <div class="right">
-            <p class="nick">{{i.user}}</p>
-            <p class="answer_t">{{i.text}}</p>
+            {%for u in users%}
+            {%if i.authorId in u.values%}
+            <p class="nick">{{u.username}}</p>
+            {%endif%}
+            {%endfor%}
+            <p class="answer_t">{{i.txt}}</p>
             <div class="checkboxgood"><form><input id="correct_a" type="checkbox"><label for="correct_a">Correct!</label></form></div>
         </div>
         </div>
