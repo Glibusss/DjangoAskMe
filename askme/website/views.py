@@ -4,10 +4,6 @@ from django.core.paginator import Paginator
 from website.models import ANSWERS, QUESTIONS, question,answer,user
 
 
-
-
-
-
 def paginate(obj_list, request, per_page=1):
 
     paginator=Paginator(obj_list,per_page)
@@ -35,7 +31,11 @@ def registration(request):
 
 
 def hot(request):
-    return render(request,'listing.html',{'page_obj':paginate(question.objects.orderByRating(),request,4),'pagename':'Hot questions','linkname':'New Questions','link':'main'})
+    return render(request,'listing.html',{'page_obj':paginate(question.objects.orderByRating(),request,4),
+                                          'pagename':'Hot questions',
+                                          'linkname':'New Questions',
+                                          'link':'main'}
+                                          )
     
     
 
@@ -60,6 +60,7 @@ def tag(request,tg):
 
     else:
         raise Http404
+
 
 def pageNotFound(request,exception):
     return HttpResponseNotFound()
