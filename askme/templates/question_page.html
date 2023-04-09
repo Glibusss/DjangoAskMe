@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
+{%load mathfilters%}
 {%load static%}
 {%block content%}
         <div class="questionblock">
             <div class="bigquestion"><div class="left"><img src="{%static 'img/default_ava.jpg' %}" class="qava">
-                <div class="card"><button class="incdecbut">+</button><p id="root" class="showcount">5</p>
+                <div class="card"><button class="incdecbut">-</button><p id="root" class="showcount">{{que.upvotequestion_set.count|sub:que.downvotequestion_set.count|default:0}}</p><button class="incdecbut">+</button>
             </div>
             
         </div>
@@ -25,7 +26,7 @@
             <ul class="list1">
                 {% for i in page_obj %}
                 <li class="fragment1">
-            <div class="answer"><div class="left"><img src="{%static 'img/default_ava.jpg' %}" class="qava"><div class="card"><button class="incdecbut">+</button><p id="root" class="showcount">5</p>
+            <div class="answer"><div class="left"><img src="{%static 'img/default_ava.jpg' %}" class="qava"><div class="card"><button class="incdecbut">-</button><p id="root" class="showcount">{{i.upvoteanswer_set.count|sub:i.downvoteanswer_set.count|default:0}}</p><button class="incdecbut">+</button>
             </div>
             
         </div>

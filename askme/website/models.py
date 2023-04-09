@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models import Count
 
 # Create your models here.
 
@@ -28,11 +29,11 @@ class questionManager(models.Manager):
 
 
     def orderByRating(self):
-        return question.objects.order_by('-rating','-publicationMoment')
+        return question.objects.annotate(rat = Count('upvotequestion')-Count('downvotequestion')).order_by('-rat','-publicationMoment')
     
 
     def orderByDate(self):
-        return question.objects.order_by('-publicationMoment','-rating')
+        return question.objects.annotate(rat = Count('upvotequestion')-Count('downvotequestion')).order_by('-publicationMoment','-rat')
     
 
     def findId(self,id):
@@ -49,10 +50,10 @@ class questionManager(models.Manager):
 class question(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField(max_length=1000)
-    rating = models.IntegerField()
     tag = models.ManyToManyField('tag',related_name='tgs')
     publicationMoment = models.DateTimeField(auto_now=True)
     objects=questionManager()
+    
 
     def __str__(self):
         return f'{self.title}'
@@ -60,7 +61,6 @@ class question(models.Model):
 
 class tag(models.Model):
     tag = models.CharField(max_length=20)
-    relev = models.IntegerField()
 
 
     def __str__(self):
@@ -68,15 +68,15 @@ class tag(models.Model):
 
 class answerManager(models.Manager):
 
-    def sortByTop(self,id):
-        return answer.objects.filter(questionId = id).order_by('-isRight','-rating')
 
+    def sortByTop(self,id):
+        return answer.objects.filter(questionId = id).annotate(rat = Count('upvoteanswer')-Count('downvoteanswer')).order_by('-isRight','-rat')
+        
 
 class answer(models.Model):
     authorId = models.ForeignKey('user',on_delete=models.PROTECT)
     txt = models.TextField(max_length=500)
     questionId = models.ForeignKey('question',on_delete=models.PROTECT)
-    rating = models.IntegerField()
     isRight = models.BooleanField()
     objects = answerManager()
 
