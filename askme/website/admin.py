@@ -16,13 +16,8 @@ admin.site.register(models.tag)
 admin.site.register(models.user)
 
 
-admin.site.register(models.upvoteQuestion)
+admin.site.register(models.questionVote)
 
 
-admin.site.register(models.downvoteQuestion)
+admin.site.register(models.answerVote)
 
-
-admin.site.register(models.upvoteAnswer)
-
-
-admin.site.register(models.downvoteAnswer)

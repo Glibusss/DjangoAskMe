@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {%load mathfilters%}
+{%load ratingQ%}
 {%load static%}
    {%block content%}
    
@@ -10,7 +11,7 @@
             <ul class="list">
                 {%for i in page_obj%}
                 <li class="fragment">
-            <div class="question"><div class="left"><img src="{%static 'img/default_ava.jpg'%}" class="qava"><div class="card"><button class="incdecbut">-</button><p id="root" class="showcount">{{i.upvotequestion_set.count|sub:i.downvotequestion_set.count}}</p><button class="incdecbut">+</button>
+            <div class="question"><div class="left"><img src="{%static 'img/default_ava.jpg'%}" class="qava"><div class="card"><button class="incdecbut">-</button><p id="root" class="showcount">{{i|ratingQ}}</p><button class="incdecbut">+</button>
             </div>
             
         </div>

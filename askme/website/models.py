@@ -1,42 +1,30 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models import Count,F
+from django.db.models import Count,F,Sum
 
 
 # Create your models here.
 
-
-class upvoteQuestion(models.Model):
+class questionVote(models.Model):
     question = models.ForeignKey('question',on_delete=models.CASCADE)
     user = models.ForeignKey('user',on_delete=models.CASCADE)
+    score = models.IntegerField(choices=[(1,'like'),(-1,'dislike')],default=1)
 
 
-class upvoteAnswer(models.Model):
+class answerVote(models.Model):
     answer = models.ForeignKey('answer',on_delete=models.CASCADE)
     user = models.ForeignKey('user',on_delete=models.CASCADE)
-
-
-class downvoteQuestion(models.Model):
-    question = models.ForeignKey('question',on_delete=models.CASCADE)
-    user = models.ForeignKey('user',on_delete=models.CASCADE)
-
-
-
-class downvoteAnswer(models.Model):
-    answer = models.ForeignKey('answer',on_delete=models.CASCADE)
-    user = models.ForeignKey('user',on_delete=models.CASCADE)
-
+    score = models.IntegerField(choices=[(1,'like'),(-1,'dislike')],default=1)
     
 class questionManager(models.Manager):
 
 
     def orderByRating(self):
-        return self.annotate(
-            likes = Count('upvotequestion',distinct=True), dis = Count('downvotequestion',distinct=True)).annotate(rat=(F('likes')-F('dis'))).order_by('-rat')
+        return self.alias(rat=Sum('questionvote__score')).order_by('-rat','-publicationMoment')
     
 
     def orderByDate(self):
-        return self.annotate(rat = Count('upvotequestion')-Count('downvotequestion')).order_by('-publicationMoment','-rat')
+        return self.alias(rat=Sum('questionvote__score')).order_by('-publicationMoment','-rat')
     
 
     def findId(self,id):
@@ -48,35 +36,59 @@ class questionManager(models.Manager):
     
 
     def filterTagByDate(self,tg):
-        return self.filter(tag__tag=tg).annotate(rat = Count('upvotequestion')-Count('downvotequestion')).order_by('-publicationMoment','-rat')
+        return self.filter(tag__tag=tg).alias(rat=Sum('questionvote__score')).order_by('-publicationMoment','-rat')
+    
+
+    def getLast(self):
+        if self.all().last()==None:
+            return 0
+        else:
+            return self.all().last().id 
+    
+
     
 
 class question(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField(max_length=1000)
-    tag = models.ManyToManyField('tag',related_name='tgs')
+    tag = models.ManyToManyField('tag',blank=True)
     publicationMoment = models.DateTimeField(auto_now=True)
     authorId = models.ForeignKey('user',on_delete=models.PROTECT,default = 1)
     objects=questionManager()
-    
 
+
+    
     def __str__(self):
         return f'{self.title}'
 
 
+class tagManager(models.Manager):
+     
+     def getLastId(self):
+        if self.all().last()==None:
+            return 0
+        else:
+            return self.all().last().id 
+
 class tag(models.Model):
     tag = models.CharField(max_length=20)
-
+    objects = tagManager()
 
     def __str__(self):
         return f'{self.tag}'
+    
 
 class answerManager(models.Manager):
 
-
+    def getLastId(self):
+        if self.all().last()==None:
+            return 0
+        else:
+            return self.all().last().id 
+    
     def sortByTop(self,id):
-        return self.filter(questionId = id).annotate(
-            likes = Count('upvoteanswer',distinct=True), dis = Count('downvoteanswer',distinct=True)).annotate(rat=(F('likes')-F('dis'))).order_by('-rat')
+        s = self.filter(questionId = id)
+        return s.alias(rat=Sum('answervote__score')).order_by('-isRight','-rat',)
         
 
 class answer(models.Model):
@@ -93,12 +105,15 @@ class userManager(models.Manager):
 
 
     def getLastId(self):
-        return self.all().last().id
+        if self.all().last()==None:
+            return 0
+        else:
+            return self.all().last().id 
+        
     
 
 class user(models.Model):
     profile = models.OneToOneField(User,on_delete=models.PROTECT)
-    username = models.CharField(max_length=100)
     avatar = models.ImageField(null=True,blank=True)
     objects = userManager()
     def __str__(self):
