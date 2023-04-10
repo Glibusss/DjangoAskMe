@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Count,F,Sum
+from django.db.models.functions import Coalesce
 
 
 # Create your models here.
@@ -87,8 +88,8 @@ class answerManager(models.Manager):
             return self.all().last().id 
     
     def sortByTop(self,id):
-        s = self.filter(questionId = id)
-        return s.alias(rat=Sum('answervote__score')).order_by('-isRight','-rat',)
+        
+        return self.alias(rat=Coalesce(Sum('answervote__score'),0)).filter(questionId = id).order_by('-isRight','-rat',)
         
 
 class answer(models.Model):
@@ -114,6 +115,7 @@ class userManager(models.Manager):
 
 class user(models.Model):
     profile = models.OneToOneField(User,on_delete=models.PROTECT)
+    username = models.CharField(max_length=100,default='')
     avatar = models.ImageField(null=True,blank=True)
     objects = userManager()
     def __str__(self):

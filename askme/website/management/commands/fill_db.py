@@ -33,7 +33,7 @@ class Command(BaseCommand):
        for i in range (0,ratio):
            p=User(username = 'user'+str(i+edgeUser+1), password = '1111')
            p.save()
-           u = user(profile=p)
+           u = user(profile=p, username='USER'+str(i+edgeUser+1))
            u.save()
            listUsers.append(
                u
@@ -50,7 +50,7 @@ class Command(BaseCommand):
            )
 
        for i in range (0,ratio*100):
-           a = answer(authorId = listUsers[random.randint(0,ratio-1)],txt = 'ANSWER'+str(i+edgeAns+1),questionId = listQuestions[random.randint(0,ratio*10-1)],isRight =0)
+           a = answer(authorId = listUsers[random.randint(0,ratio-1)],txt = 'ANSWER'+str(i+edgeAns+1),questionId = listQuestions[random.randint(0,ratio*10-1)],isRight =False)
            a.save()
            listAns.append(
                a
