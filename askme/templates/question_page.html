@@ -32,7 +32,7 @@
             
         </div>
         <div class="right">
-            <p class="nick">{{i.authorId.username}}</p>
+            <p class="nick">{{i.authorId.nickname}}</p>
             <p class="answer_t">{{i.txt}}</p>
             <div class="checkboxgood"><form><input id="correct_a" type="checkbox"><label for="correct_a">Correct!</label></form></div>
         </div>
@@ -41,9 +41,11 @@
                 {%endfor%}
             </ul>
         </div>
-        <div class="yourans"><form class="ansfrom" >
+        {%if request.user.is_authenticated%}
+        <div class="yourans"><form class="ansfrom" method="POST" action="{%url 'questions' id=que.id%}?page={{page_obj.number}}">
+            {%csrf_token%}
             <div class="allf"><textarea name="anstxt"  class="atxt" placeholder="answer" required maxlength="1000"></textarea></div>
            <div class="ansbut"> <input type="submit" value="Answer" class="goans"></div>
         
-    </form></div> 
+    </form></div> {%endif%}
     {%endblock%}

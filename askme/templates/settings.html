@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{%load static%}
+   {%block content%}
+        <div class="formname">Settings</div>
+        <div class="formset"><form class="settings">
+            <div class="allf"><p class="alltitle">Login</p><input type="text" name="nlg" value="User" placeholder="Login" class="trow" ></div>
+            <div class="allf"><p class="alltitle">E-mail</p><input type="email" name="nem" value="User@gmail.com" placeholder="Email" class="trow" ></div>
+            <div class="allf"><p class="alltitle">NickName</p><input type="text" name="nnn" value="NickName" placeholder="NickName" class="trow" ></div>
+            <div class="allf"><p class="alltitle">Avatar</p><label class="avatar-field"><input type="file" name="avatar" id="avatar" accept="image/jpeg,image/png "><p class="chav">Choose avatar</p>
+               </label> <p class="pp"><img src="{%static 'img/default_ava.jpg'%}" name="preview"  alt="Error" class="prevpic"></p></div>
+           <div class="subb"> <input type="submit" value="Update" class="goask"></div>   
+        </form></div>
+    
+  
+{%endblock%}
+

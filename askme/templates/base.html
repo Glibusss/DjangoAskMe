@@ -26,10 +26,26 @@
             <button type="submit" class="ask">ASK!</button>
         </form>
     </div>
+    {%if request.user.is_authenticated%}
+    <div class="avatar">
+        <label class="ava">
+            <img src="{%static 'img/default_ava.jpg'%}"  alt="Fail to load" class="avapic">
+        </label>
+    </div>
+    <div class="foruser">
+        <div class="nickname">{{request.user.profile.nickname}}</div>
+        <div class="settings">
+            <a href="{%url 'edit'%}" name="setting">Настройки</a>
+            <a href="{%url 'logout'%}" name="lo">Выйти</a>
+        </div>
+        
+    </div>
+    {%else%}
     <div class="loginreg">
 <a href="{%url 'login'%}" class="loginr">Login</a>
 <a href="{%url 'signup'%}" class="regr">Registration</a>
     </div>
+    {%endif%}
    </div>
     <hr class="horizontal-gradient">
 <div class="container">

@@ -3,13 +3,13 @@
 {%block content%}
         <div class="formname">Registration</div>
         <div class="regerr">{{Errortype}}</div>
-        <div class="formreg"> <form class="rform">
-           
-                <div class="allf"><input type="text" name="lg" placeholder="Login" class="trow" required maxlength="50"></div>
+        <div class="formreg"> <form class="rform" action="/signup/" method="POST">
+                {%csrf_token%}
+                <div class="allf"><input type="text" name="username" placeholder="Login" class="trow" required maxlength="50"></div>
                 <div class="allf"><input type="email" name="email" placeholder="Email" class="trow" required maxlength="256"></div>
-                <div class="allf"><input type="text" name="nick" placeholder="Nickname" class="trow" required maxlength="50"></div>
-                <div class="allf"><input type="password" name="pas1" placeholder="Password" class="trow" required maxlength="32" minlength="8"></div>
-                <div class="allf"><input type="password" name="pas1" placeholder="Repeat password" class="trow" required maxlength="32" minlength="8"></div>
+                <div class="allf"><input type="text" name="nickname" placeholder="Nickname" class="trow" required maxlength="50"></div>
+                <div class="allf"><input type="password" name="password" placeholder="Password" class="trow" required maxlength="32" minlength="8"></div>
+                <div class="allf"><input type="password" name="repeat_password" placeholder="Repeat password" class="trow" required maxlength="32" minlength="8"></div>
                 <div class="allf"><label class="avatar-field"><input type="file" name="avatar" id="avatar" accept="image/jpeg,image/png "><p class="chav">Choose avatar</p></label></div>
                 <div class="subb"> <input type="submit" value="Go" class="regbut"></div>
         </form></div>

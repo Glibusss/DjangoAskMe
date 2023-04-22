@@ -1,5 +1,5 @@
 import random
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from website.models import question, answer,user,tag,answerVote,questionVote
 from django.contrib.auth.models import User
 
@@ -33,7 +33,7 @@ class Command(BaseCommand):
        for i in range (0,ratio):
            p=User(username = 'user'+str(i+edgeUser+1), password = '1111')
            p.save()
-           u = user(profile=p, username='USER'+str(i+edgeUser+1))
+           u = user(profile=p, nickname='USER'+str(i+edgeUser+1))
            u.save()
            listUsers.append(
                u
