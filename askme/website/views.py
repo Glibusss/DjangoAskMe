@@ -168,9 +168,10 @@ def questions(request,id):
         a=answer.objects.sortByTop(id)
         i=0
         for c in a:
+            i=i+1
             if c==ans:
                 break
-            i=i+1
+            
 
         return redirect(f"{reverse('questions', kwargs={'id':que.id})}?page={int(i/2)+i%2}")
    
