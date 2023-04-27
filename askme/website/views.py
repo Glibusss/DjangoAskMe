@@ -165,11 +165,14 @@ def questions(request,id):
             id=answer.objects.getLastId()+1
         )
         ans.save()
-        pg=question.objects.alias(rat=Sum('questionvote__score')).count()
-        curAns=answer.objects.sortByTop(id)
+        a=answer.objects.sortByTop(id)
         i=0
+        for c in a:
+            if c==ans:
+                break
+            i=i+1
 
-        return redirect('questions', id = que.id)
+        return redirect(f"{reverse('questions', kwargs={'id':que.id})}?page={int(i/2)+i%2}")
    
    
    
