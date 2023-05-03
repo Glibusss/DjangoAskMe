@@ -1,11 +1,11 @@
 from django import template
-from ..models import questionVote
+from ..models import QuestionVote
 
 register=template.Library()
 
 
 @register.filter
 def ratingQ(value):
-    likes = questionVote.objects.all().filter(score=1,question__id=value.id).count()
-    dises = questionVote.objects.all().filter(score=-1,question__id=value.id).count()
+    likes = QuestionVote.objects.all().filter(score=1,question__id=value.id).count()
+    dises = QuestionVote.objects.all().filter(score=-1,question__id=value.id).count()
     return likes-dises

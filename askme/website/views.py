@@ -2,7 +2,7 @@ from django.http import Http404, HttpResponseNotFound
 from django.shortcuts import render,redirect
 from django.core.paginator import Paginator
 from django.urls import reverse
-from website.models import question,answer,Profile,User,tag
+from website.models import Question,Answer,Profile,User,Tag
 from website.forms import LoginForm, QuestionForm,RegistrationForm, AnswerForm
 from django.contrib import auth
 from django.contrib.auth import login
@@ -27,7 +27,7 @@ def paginate(objList, request, perPage=1):
 
 
 def listing(request):
-    return render(request,'listing.html',{'page_obj':paginate(question.objects.orderByDate(),request,4),
+    return render(request,'listing.html',{'page_obj':paginate(Question.objects.orderByDate(),request,4),
                                           'pagename':'New Questions',
                                           'linkname':'Hot questions',
                                           'link':'hots'}
@@ -83,7 +83,7 @@ def registration(request):
 
 
 def hot(request):
-    return render(request,'listing.html',{'page_obj':paginate(question.objects.orderByRating(),request,4),
+    return render(request,'listing.html',{'page_obj':paginate(Question.objects.orderByRating(),request,4),
                                           'pagename':'Hot questions',
                                           'linkname':'New Questions',
                                           'link':'main'}
@@ -104,7 +104,7 @@ def ask(request):
             if not form.good():
                 return render(request,'question_form_login.html',{'Errortype':'Too many tags'})
             tagNames = form.cleaned_data['tags'].split() 
-            newQuestion = question(
+            newQuestion = Question(
                 title=form.cleaned_data['title'],
                 description=form.cleaned_data['text'],
                 authorId=Profile.objects.get(profile=request.user),
@@ -113,26 +113,26 @@ def ask(request):
             print(tagNames) 
             newQuestion.save() 
             if len(tagNames)>0:
-                if len(tagNames)>0 and not tag.objects.findTag(tagNames[0]):
-                    t=tag(tag=tagNames[0])
+                if len(tagNames)>0 and not Tag.objects.findTag(tagNames[0]):
+                    t=Tag(tag=tagNames[0])
                     t.save()
                     newQuestion.tag.add(t)
                 else:
-                    newQuestion.tag.add(tag.objects.get(tag=tagNames[0]))
+                    newQuestion.tag.add(Tag.objects.get(tag=tagNames[0]))
             if len(tagNames)>1:
-                if  not tag.objects.findTag(tagNames[1]):
-                    t=tag(tag=tagNames[1])
+                if  not Tag.objects.findTag(tagNames[1]):
+                    t=Tag(tag=tagNames[1])
                     t.save()
                     newQuestion.tag.add(t)
                 else:
-                    newQuestion.tag.add(tag.objects.get(tag=tagNames[1]))
+                    newQuestion.tag.add(Tag.objects.get(tag=tagNames[1]))
             if len(tagNames)>2:
-                if len(tagNames)>2 and not tag.objects.findTag(tagNames[2]):
-                    t=tag(tag=tagNames[0])
+                if len(tagNames)>2 and not Tag.objects.findTag(tagNames[2]):
+                    t=Tag(tag=tagNames[0])
                     t.save()
                     newQuestion.tag.add(t)
                 else:
-                    newQuestion.tag.add(tag.objects.get(tag=tagNames[2]))
+                    newQuestion.tag.add(Tag.objects.get(tag=tagNames[2]))
 
             return redirect('questions', id=newQuestion.id)
             
@@ -144,28 +144,28 @@ def ask(request):
 
 def questions(request,id):
    if request.method=='GET':
-        if question.objects.findId(id) == None:
+        if Question.objects.findId(id) == None:
             raise Http404 
-        ans=answer.objects.sortByTop(id)
+        ans=Answer.objects.sortByTop(id)
         return render(request, 'question_page.html',{'page_obj':paginate(ans,request,2),
                                                 'answers':ans,
-                                                'que':question.objects.findId(id)}
+                                                'que':Question.objects.findId(id)}
                                                 )
    
    if request.method == 'POST':
         form = AnswerForm(data=request.POST)
         print(form.data)
-        que = question.objects.findId(id)
+        que = Question.objects.findId(id)
         print(que)
         print(que.title)
-        ans = answer(
+        ans = Answer(
             txt=form.data['anstxt'],
             authorId=Profile.objects.get(profile=request.user),
             questionId=que,
-            id=answer.objects.getLastId()+1
+            id=Answer.objects.getLastId()+1
         )
         ans.save()
-        a=answer.objects.sortByTop(id)
+        a=Answer.objects.sortByTop(id)
         i=0
         for c in a:
             i=i+1
@@ -180,10 +180,10 @@ def questions(request,id):
     
 def tag_search(request,tg):
     
-    temp_que=question.objects.filterTagByDate(tg)
+    temp_que=Question.objects.filterTagByDate(tg)
 
     if len(temp_que)>0:
-        return render(request,'listing.html',{'page_obj':paginate(question.objects.filterTagByDate(tg),request,4),
+        return render(request,'listing.html',{'page_obj':paginate(Question.objects.filterTagByDate(tg),request,4),
                                               'pagename':'Results searching by '+tg,
                                               'linkname':'New Questions',
                                               'link':'main'}

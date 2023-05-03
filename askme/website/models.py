@@ -6,18 +6,18 @@ from django.db.models.functions import Coalesce
 
 # Create your models here.
 
-class questionVote(models.Model):
+class QuestionVote(models.Model):
     question = models.ForeignKey('question',on_delete=models.CASCADE)
     user = models.ForeignKey('Profile',on_delete=models.CASCADE)
     score = models.IntegerField(choices=[(1,'like'),(-1,'dislike')],default=1)
 
 
-class answerVote(models.Model):
+class AnswerVote(models.Model):
     answer = models.ForeignKey('answer',on_delete=models.CASCADE)
     user = models.ForeignKey('Profile',on_delete=models.CASCADE)
     score = models.IntegerField(choices=[(1,'like'),(-1,'dislike')],default=1)
     
-class questionManager(models.Manager):
+class QuestionManager(models.Manager):
 
 
     def orderByRating(self):
@@ -31,7 +31,7 @@ class questionManager(models.Manager):
     def findId(self,id):
         try:
             q=self.get(pk=id)
-        except question.DoesNotExist:
+        except Question.DoesNotExist:
             return None
         return q
     
@@ -49,13 +49,13 @@ class questionManager(models.Manager):
 
     
 
-class question(models.Model):
+class Question(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField(max_length=1000)
-    tag = models.ManyToManyField('tag',blank=True,null=True)
+    tag = models.ManyToManyField('tag',blank=True)
     publicationMoment = models.DateTimeField(auto_now=True)
     authorId = models.ForeignKey('Profile',on_delete=models.PROTECT,default = 1)
-    objects=questionManager()
+    objects=QuestionManager()
 
 
     
@@ -63,13 +63,13 @@ class question(models.Model):
         return f'{self.title}'
 
 
-class tagManager(models.Manager):
+class TagManager(models.Manager):
      
 
      def findTag(self,tg):
          try:
              self.get(tag=tg)
-         except tag.DoesNotExist:
+         except Tag.DoesNotExist:
              return False
          return True
      
@@ -79,16 +79,16 @@ class tagManager(models.Manager):
         else:
             return self.all().last().id 
 
-class tag(models.Model):
+class Tag(models.Model):
     tag = models.CharField(max_length=20)
-    objects = tagManager()
+    objects = TagManager()
 
 
     def __str__(self):
         return f'{self.tag}'
     
 
-class answerManager(models.Manager):
+class AnswerManager(models.Manager):
 
     def getLastId(self):
         if self.all().last()==None:
@@ -101,17 +101,17 @@ class answerManager(models.Manager):
         return self.alias(rat=Coalesce(Sum('answervote__score'),0)).filter(questionId = id).order_by('-isRight','-rat',)
         
 
-class answer(models.Model):
+class Answer(models.Model):
     authorId = models.ForeignKey('Profile',on_delete=models.PROTECT)
     txt = models.TextField(max_length=500)
     questionId = models.ForeignKey('question',on_delete=models.PROTECT)
     isRight = models.BooleanField(default=False)
-    objects = answerManager()
+    objects = AnswerManager()
 
     def __str__(self):
         return f'{self.id}'
 
-class userManager(models.Manager):
+class UserManager(models.Manager):
 
 
     def getLastId(self):
@@ -126,7 +126,7 @@ class Profile(models.Model):
     profile = models.OneToOneField(User,on_delete=models.PROTECT)
     nickname = models.CharField(max_length=100,default='')
     avatar = models.ImageField(null=True,blank=True)
-    objects = userManager()
+    objects = UserManager()
 
     def __str__(self):
         return f'{self.nickname}'

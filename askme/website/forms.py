@@ -1,5 +1,5 @@
 from django import forms
-from website.models import Profile, User
+from website.models import Profile
 from django.contrib.auth.forms import UserCreationForm
 
 
