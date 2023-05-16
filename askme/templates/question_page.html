@@ -14,7 +14,7 @@
             <p class="descriptionq">{{que.description}}</p>
             <div class="bansandtags"><div class="qtags"><p >Tags:</p>
                 {%for q in que.tag.all%}
-                <a href="{%url 'tag' q%}">{{q}}</a>
+                <a href="{%url 'tag' q%}">{{q}}&nbsp</a>
                 {%endfor%}
             
             </div></div>

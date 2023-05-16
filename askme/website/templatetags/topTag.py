@@ -8,4 +8,4 @@ register=template.Library()
 @register.filter
 def topTagAt(value):
     
-    return Tag.objects.annotate(rat=Count('question')).order_by('-rat')[value].tag
+    return Tag.objects.annotate(rat=Count('question')).order_by('-rat')[value].tag or ""

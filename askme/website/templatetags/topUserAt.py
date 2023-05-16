@@ -9,4 +9,4 @@ register=template.Library()
 def topUserAt(value):
     
     return Profile.objects.annotate(questions=Count('question',distinct=True),answers=Count('answer',distinct=True)).annotate(
-        rat=F('questions')+F('answers')).order_by('-rat')[value].nickname
+        rat=F('questions')+F('answers')).order_by('-rat')[value].nickname or ""

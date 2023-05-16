@@ -33,7 +33,7 @@ def listing(request):
                                           'link':'hots'}
                                           )
 
-
+@login_required(login_url='/login/',redirect_field_name='continue')
 def logout(request):
     auth.logout(request)
     return redirect('main',permanent=True)
@@ -41,7 +41,8 @@ def logout(request):
 @csrf_protect
 def Login(request):
     if request.method=='GET':
-        return render(request,'login_form.html')
+        #TODO: continue
+        return render(request,Login)
     if request.method == 'POST':
         userForm = LoginForm(request.POST)
         if userForm.is_valid():
@@ -90,7 +91,7 @@ def hot(request):
                                           )
     
     
-@login_required(login_url='/login/')
+@login_required(login_url='/login/',redirect_field_name='continue')
 def ask(request):  
     if request.method=='GET':
         return render(request,'question_form_login.html')
