@@ -2,11 +2,12 @@ from django.http import Http404, HttpResponseNotFound
 from django.shortcuts import render,redirect
 from django.core.paginator import Paginator
 from django.urls import reverse
-from website.models import Question,Answer,Profile,User,Tag
-from website.forms import LoginForm, QuestionForm,RegistrationForm, AnswerForm
+from website.models import Question,Answer,Profile,User,Tag,QuestionVote,AnswerVote
+from website.forms import LoginForm, QuestionForm,RegistrationForm, AnswerForm,SettingsForm
 from django.contrib import auth
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_protect
 from django.db.models import Sum
 
@@ -42,7 +43,7 @@ def logout(request):
 def Login(request):
     if request.method=='GET':
         #TODO: continue
-        return render(request,Login)
+        return render(request,'login_form.html')
     if request.method == 'POST':
         userForm = LoginForm(request.POST)
         if userForm.is_valid():
@@ -56,12 +57,13 @@ def Login(request):
             
     
 
-
+@require_http_methods(['GET','POST'])
+@csrf_protect
 def registration(request):
     if request.method == 'GET':
         return render(request, "reg_form.html")
     elif request.method == 'POST':
-        regForm = RegistrationForm(request.POST)
+        regForm = RegistrationForm(data=request.POST, files=request.FILES)
         print(request.POST)
         
         if regForm.is_valid():
@@ -76,7 +78,7 @@ def registration(request):
             print(regForm.cleaned_data)
             user = User.objects.create_user(regForm.cleaned_data['username'], regForm.cleaned_data['email'], regForm.cleaned_data['password'])
             user.save()
-            profile = Profile(profile=user,nickname=regForm.cleaned_data['nickname'])
+            profile = Profile(profile=user,nickname=regForm.cleaned_data['nickname'], avatar=regForm.cleaned_data['avatar'])
             profile.save()
             
             return redirect('/login/')
@@ -193,9 +195,130 @@ def tag_search(request,tg):
     else:
         raise Http404
 
-@login_required
+@csrf_protect
+@login_required(login_url='/login/',redirect_field_name='continue')
+@require_http_methods(['GET','POST'])
 def settings(request):
-    return render(request,'settings.html')
+    if request.method == 'GET':
+        return render(request,'settings.html')
+    
+    if request.method == 'POST':
+        form = SettingsForm(data=request.POST, files=request.FILES)
+        
+        print(request.POST)
+        if form.is_valid():
+            print(form.cleaned_data['avatar'])
+            prof = Profile.objects.get(id=request.user.id)
+            if not form.checkMail() and form.cleaned_data['email']!=prof.profile.email:
+                return render(request, "settings.html",{'Errortype':'User with this email already exists'})
+            
+
+            elif not form.checkLogin() and form.cleaned_data['username']!=prof.profile.username:
+                return render(request, "settings.html",{'Errortype':'User with this login already exists'})
+            
+            if prof.nickname!=form.cleaned_data['nickname']:
+                prof.nickname=form.cleaned_data['nickname']
+
+            if prof.avatar!=form.cleaned_data['avatar'] and form.cleaned_data['avatar']!=None:
+                prof.avatar=form.cleaned_data['avatar']
+
+            
+
+            prof.save()
+            user = User.objects.get(id=request.user.id)
+
+            if user.username!= form.cleaned_data['username']:
+                user.username= form.cleaned_data['username']
+
+            if user.email!=form.cleaned_data['email']:
+                user.email=form.cleaned_data['email']
+            user.save()
+            print(user)
+            
+            return redirect(reverse('edit'))
+        return render(request,'settings.html')
+    
+@csrf_protect
+@login_required(login_url='/login/',redirect_field_name='continue')
+@require_http_methods(['POST'])
+def upvote_question(request):
+    print(request.POST)
+    questionId=request.POST['id']
+    like=QuestionVote.objects.filter(question_id=questionId,user_id=request.user.id)
+    
+    if len(like)==0:
+        print('OK')
+        qv = QuestionVote(score=1,question_id=questionId,user_id=request.user.id)
+        qv.save()
+
+    return redirect('main',permanent=True)
+
+
+@csrf_protect
+@login_required(login_url='/login/',redirect_field_name='continue')
+@require_http_methods(['POST'])
+def downvote_question(request):
+    print(request.POST)
+    questionId=request.POST['id']
+    like=QuestionVote.objects.filter(question_id=questionId,user_id=request.user.id)
+    new_dis = -1
+    if len(like)==0:
+        print('OK')
+        qv = QuestionVote(score=new_dis,question_id=questionId,user_id=request.user.id)
+        qv.save()
+
+    return redirect('main',permanent=True)
+
+
+@csrf_protect
+@login_required(login_url='/login/',redirect_field_name='continue')
+@require_http_methods(['POST'])
+def make_correct(request):
+    print(request.POST)
+    print('correct')
+    ansId=request.POST['id']
+    ans=Answer.objects.get(id=ansId)
+    print(ans)
+    if ans.isRight==False and ans.questionId.authorId.id==request.user.profile.id:
+        print('OK')
+        ans.isRight=True
+        ans.save()
+
+    return redirect('main',permanent=True)
+
+
+
+@csrf_protect
+@login_required(login_url='/login/',redirect_field_name='continue')
+@require_http_methods(['POST'])
+def upvote_answer(request):
+    print(request.POST)
+    questionId=request.POST['id']
+    like=AnswerVote.objects.filter(answer_id=questionId,user_id=request.user.id)
+    
+    if len(like)==0:
+        print('OK')
+        an = AnswerVote(score=1,answer_id=questionId,user_id=request.user.id)
+        an.save()
+
+    return redirect('main',permanent=True)
+
+
+@csrf_protect
+@login_required(login_url='/login/',redirect_field_name='continue')
+@require_http_methods(['POST'])
+def downvote_answer(request):
+    print(request.POST)
+    questionId=request.POST['id']
+    like=AnswerVote.objects.filter(question_id=questionId,user_id=request.user.id)
+    new_dis = -1
+    if len(like)==0:
+        print('OK')
+        an = AnswerVote(score=new_dis,question_id=questionId,user_id=request.user.id)
+        an.save()
+
+    return redirect('main',permanent=True)
+    
 
 
 def pageNotFound(request,exception):

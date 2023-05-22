@@ -25,13 +25,12 @@ SECRET_KEY = 'django-insecure-w@moxvrf%4@hrn@u!)%&$u#^zcad3(&j&fhx3_0_+er_bn9=7$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'mathfilters',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -134,3 +133,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 APPEND_SLASH=True
 LOGIN_URL = '/login'
+
+MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/media/'

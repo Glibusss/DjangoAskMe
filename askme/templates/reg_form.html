@@ -3,7 +3,7 @@
 {%block content%}
         <div class="formname">Registration</div>
         <div class="regerr">{{Errortype}}</div>
-        <div class="formreg"> <form class="rform" action="/signup/" method="POST">
+        <div class="formreg"> <form class="rform" action="/signup/" method="POST" enctype="multipart/form-data">
                 {%csrf_token%}
                 <div class="allf"><input type="text" name="username" placeholder="Login" class="trow" required maxlength="50"></div>
                 <div class="allf"><input type="email" name="email" placeholder="Email" class="trow" required maxlength="256"></div>

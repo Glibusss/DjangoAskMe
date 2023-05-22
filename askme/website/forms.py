@@ -1,6 +1,7 @@
 from django import forms
 from website.models import Profile
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 
 class QuestionForm(forms.Form):
@@ -20,7 +21,7 @@ class RegistrationForm(forms.Form):
     username = forms.CharField()
     email = forms.CharField()
     nickname = forms.CharField()
-    #avatar = forms.ImageField()
+    avatar = forms.ImageField(required=False)
     password = forms.CharField()
     repeat_password = forms.CharField()
     
@@ -56,3 +57,35 @@ class LoginForm(forms.Form):
 
 class AnswerForm(forms.Form):
     anstxt = forms.CharField()
+
+
+class SettingsForm(forms.Form):
+    username = forms.CharField()
+    email = forms.CharField()
+    nickname = forms.CharField()
+    avatar = forms.ImageField(required=False)
+    
+    
+    def checkPassword(self):
+        cleaned_data = super().clean()
+        if cleaned_data['password'] != cleaned_data['repeat_password']:
+            return False
+        return True
+    
+
+    def checkMail(self):
+        cleaned_data = super().clean()
+        try:
+            profiles = User.objects.get(email=cleaned_data['email'])
+        except User.DoesNotExist:
+                return True
+        return False
+    
+
+    def checkLogin(self):
+        cleaned_data = super().clean()
+        try:
+            profiles = Profile.objects.get(profile__username=cleaned_data['username'])
+        except Profile.DoesNotExist:
+                return True
+        return False

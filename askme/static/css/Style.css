@@ -372,7 +372,7 @@ margin-left:5%;
     margin:0 auto;
     font-size:0.9vw;
 }
-.incdecbut{
+.incbut_q,.incbut_a, .decbut_q,.decbut_a{
     width:15%;
     height :15%;
     border-style:none;
@@ -381,7 +381,7 @@ margin-left:5%;
     background-color: silver;
     text-align: center;
 }
-.incdecbut:hover{
+.incbut_q:hover,.incbut_a:hover, .decbut_q:hover,.decbut_a:hover{
     background-color: red;
     color:blue;
     border-color:black;

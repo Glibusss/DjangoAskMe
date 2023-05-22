@@ -125,7 +125,7 @@ class UserManager(models.Manager):
 class Profile(models.Model):
     profile = models.OneToOneField(User,on_delete=models.PROTECT)
     nickname = models.CharField(max_length=100,default='')
-    avatar = models.ImageField(null=True,blank=True)
+    avatar = models.ImageField(null=True,blank=True,upload_to='avatars/', default='default_ava.jpg')
     objects = UserManager()
 
     def __str__(self):

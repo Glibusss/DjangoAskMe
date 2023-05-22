@@ -29,7 +29,7 @@
     {%if request.user.is_authenticated%}
     <div class="avatar">
         <label class="ava">
-            <img src="{%static 'img/default_ava.jpg'%}"  alt="Fail to load" class="avapic">
+            <img src="{{request.user.profile.avatar.url}}"  alt="Fail to load" class="avapic">
         </label>
     </div>
     <div class="foruser">
@@ -79,4 +79,6 @@
 </div>
 <div class="footer"></div>
     </body>
+    <script src ="{%static 'js/jquery.js' %}"></script>
+    <script src ="{%static 'js/main.js' %}"></script>
 </html>

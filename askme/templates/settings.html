@@ -2,12 +2,14 @@
 {%load static%}
    {%block content%}
         <div class="formname">Settings</div>
-        <div class="formset"><form class="settings">
-            <div class="allf"><p class="alltitle">Login</p><input type="text" name="nlg" value="User" placeholder="Login" class="trow" ></div>
-            <div class="allf"><p class="alltitle">E-mail</p><input type="email" name="nem" value="User@gmail.com" placeholder="Email" class="trow" ></div>
-            <div class="allf"><p class="alltitle">NickName</p><input type="text" name="nnn" value="NickName" placeholder="NickName" class="trow" ></div>
+        <div class="loginerr">{{Errortype}}</div>
+        <div class="formset"><form class="settings" action="/edit/" method="POST" enctype="multipart/form-data">
+         {%csrf_token%}
+            <div class="allf"><p class="alltitle">Login</p><input type="text" name="username" value="{{request.user.username}}" placeholder="Login" class="trow" ></div>
+            <div class="allf"><p class="alltitle">E-mail</p><input type="email" name="email" value="{{request.user.email}}" placeholder="Email" class="trow" ></div>
+            <div class="allf"><p class="alltitle">NickName</p><input type="text" name="nickname" value="{{request.user.profile.nickname}}" placeholder="NickName" class="trow" ></div>
             <div class="allf"><p class="alltitle">Avatar</p><label class="avatar-field"><input type="file" name="avatar" id="avatar" accept="image/jpeg,image/png "><p class="chav">Choose avatar</p>
-               </label> <p class="pp"><img src="{%static 'img/default_ava.jpg'%}" name="preview"  alt="Error" class="prevpic"></p></div>
+               </label> <p class="pp"><img src="{{request.user.profile.avatar.url}}" name="preview"  alt="Error" class="prevpic"></p></div>
            <div class="subb"> <input type="submit" value="Update" class="goask"></div>   
         </form></div>
     

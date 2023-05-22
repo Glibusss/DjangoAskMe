@@ -10,7 +10,7 @@
             <ul class="list">
                 {%for i in page_obj%}
                 <li class="fragment">
-            <div class="question"><div class="left"><img src="{%static 'img/default_ava.jpg'%}" class="qava"><div class="card"><button class="incdecbut">-</button><p id="root" class="showcount">{{i|ratingQ}}</p><button class="incdecbut">+</button>
+            <div class="question"><div class="left"><img src="{%static 'img/default_ava.jpg'%}" class="qava"><div class="card"><button data-id="{{i.id}}" class="decbut_q">-</button><p id="root" class="showcount">{{i|ratingQ}}</p><button data-id="{{i.id}}" class="incbut_q">+</button>
             </div>
             
         </div>
