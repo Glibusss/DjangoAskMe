@@ -1,4 +1,4 @@
-from django.http import Http404, HttpResponseNotFound
+from django.http import Http404, HttpResponseNotFound, JsonResponse
 from django.shortcuts import render,redirect
 from django.core.paginator import Paginator
 from django.urls import reverse
@@ -78,7 +78,10 @@ def registration(request):
             print(regForm.cleaned_data)
             user = User.objects.create_user(regForm.cleaned_data['username'], regForm.cleaned_data['email'], regForm.cleaned_data['password'])
             user.save()
-            profile = Profile(profile=user,nickname=regForm.cleaned_data['nickname'], avatar=regForm.cleaned_data['avatar'])
+            if regForm.cleaned_data['avatar'] != None:
+                profile = Profile(profile=user,nickname=regForm.cleaned_data['nickname'], avatar=regForm.cleaned_data['avatar'])
+            else:
+                profile = Profile(profile=user,nickname=regForm.cleaned_data['nickname'],avatar='avatars/default_ava.jpg')
             profile.save()
             
             return redirect('/login/')
@@ -284,7 +287,10 @@ def make_correct(request):
         ans.isRight=True
         ans.save()
 
-    return redirect('main',permanent=True)
+    return JsonResponse({
+    'isRight':ans.isRight
+
+    })
 
 
 

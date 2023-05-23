@@ -105,7 +105,11 @@ const request = new Request(
         body: 'id='+$(this).data('id')
     }
 );
-fetch(request).then(function(response){
-    console.log('correct');
-});
+
+
+fetch(request).then(
+    response_raw =>response_raw.json().then(
+        response_json=>document.getElementById("JJ").checked=new_isChecked
+    )
+);
 });
