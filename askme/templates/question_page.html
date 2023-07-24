@@ -35,11 +35,7 @@
             <p class="nick">{{i.authorId.nickname}}</p>
             <p class="answer_t">{{i.txt}}</p>
             <div class="checkboxgood"><form>
-                {%if i.isRight is True%}
                 <input checked class="correct" data-id="{{i.id}}" id="correct_a" type="checkbox" isChecked="{{i.isRight}}">
-                {%else%}
-                <input class="correct"  data-id="{{i.id}}" id="correct_a" type="checkbox">
-                {%endif%}
                 <label for="correct_a">Correct!
 
                 </label>
