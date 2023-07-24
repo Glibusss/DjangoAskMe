@@ -111,7 +111,7 @@ fetch(request).then(
     response_raw =>response_raw.json().then(function(response_json)
     {
     const comment = document.querySelector(`[data-id=${$(this).data('id)}`);
-    response_json.isRight === true? comment.setAttribute('checked', "checked"):removeAttribute('checked');
+    response_json.isRight === true? comment.checked = true : comment.checked=false;
     }
     )
 );
