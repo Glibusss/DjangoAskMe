@@ -109,7 +109,7 @@ const request = new Request(
 
 fetch(request).then(
     response_raw =>response_raw.json().then(
-        response_json=>document.getElementById("JJ").checked=new_isChecked
+        response_json=>document.querySelector(`[data-id=${$(this).data('id)}`).checked=new_isChecked
     )
 );
 });
