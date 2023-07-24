@@ -108,8 +108,11 @@ const request = new Request(
 
 
 fetch(request).then(
-    response_raw =>response_raw.json().then(
-        response_json=>document.querySelector(`[data-id=${$(this).data('id)}`).checked=new_isChecked
+    response_raw =>response_raw.json().then(function(response_json)
+    {
+    const comment = document.querySelector(`[data-id=${$(this).data('id)}`);
+    response_json.isRight === true? comment.setAttribute('checked'):removeAttribute('checked');
+    }
     )
 );
 });
